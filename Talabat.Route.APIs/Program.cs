@@ -1,6 +1,10 @@
 
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Talabat.Core.Entities;
+using Talabat.Core.Repositries.Contract;
+using Talabat.Repositries;
 using Talabat.Repositries.Data;
 
 namespace Talabat.Route.APIs
@@ -26,6 +30,10 @@ namespace Talabat.Route.APIs
 			{
 				options.UseSqlServer(WebApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 			});
+			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<Product>, GenericRepositry<Product>>();
+			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<ProductBrand>, GenericRepositry<Product>>();
+			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<Product>, GenericRepositry<Product>>();
+			WebApplicationBuilder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>) );
 
 			#endregion
 
