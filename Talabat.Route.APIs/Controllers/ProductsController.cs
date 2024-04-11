@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositries.Contract;
+using Talabat.Repositries;
 
 namespace Talabat.Route.APIs.Controllers
 {
@@ -10,11 +11,21 @@ namespace Talabat.Route.APIs.Controllers
 	{
 
 
+		private readonly IGenericRepositry<Product> _productsRepo;
 
 		public ProductsController(IGenericRepositry<Product> productsRepo)
 		{
-
+			_productsRepo = productsRepo;
 		}
+		// /api/
+		[HttpGet]
+		public async Task<IActionResult> GetProducts()
+		{
+			var products = await _productsRepo.GetAllAsync();
+			return Ok(products);
+		}
+
+
 
 	}
 }
