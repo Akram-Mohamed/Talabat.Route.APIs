@@ -21,12 +21,15 @@ namespace Talabat.Repositries
 
 		public async Task<IEnumerable<T>> GetAllAsync()
 		{
+			return (IEnumerable<T>) await _dbContext.Set<Product>().Include(P => P.Brand).Include(P => P.Category).ToListAsync();
 			return await _dbContext.Set<T>().ToListAsync();
 		}
 
 		public async Task<T?> GetAsync(int id)
 		{
-			return await _dbContext.Set<T>().FindAsync(id);
+
+			return await _dbContext.Set<Product>().Where(P => P.Id == id).Include(P => P.Brand).Include(P => P.Category).FirstOrDefaultAsync()	 as T;
+			//return await _dbContext.Set<T>().FindAsync(id);
 		}
 	}
 }
