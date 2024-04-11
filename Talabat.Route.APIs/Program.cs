@@ -1,13 +1,17 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Talabat.Repositries.Data;
 
 namespace Talabat.Route.APIs
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
+			//StoreContext dbContext = /*new StoreContext()*/;
+
+
 			var WebApplicationBuilder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
@@ -25,7 +29,28 @@ namespace Talabat.Route.APIs
 
 			#endregion
 
+
 			var app = WebApplicationBuilder.Build();
+
+			using var scope = app.Services.CreateScope();
+			app.Services.CreateScope();
+			var services = scope.ServiceProvider;
+			var _dbContext = services.GetRequiredService<StoreContext>();
+			// ASK CLR for Creating Object from DbContext Explicitly
+			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+			
+			try
+			{
+				await _dbContext.Database.MigrateAsync();
+
+			}
+			catch (Exception ex)
+			{
+
+				var logger= loggerFactory.CreateLogger<Program>();
+				logger.LogError(ex, "AN Error Happens On Migrations");
+
+			}
 
 			#region Configure Kestrel Services
 			// Configure the HTTP request pipeline.
