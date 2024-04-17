@@ -5,6 +5,7 @@ using Talabat.Core.Repositries.Contract;
 using Talabat.Core.Specifications;
 using Talabat.Core.Specifications.Product_Specs;
 using Talabat.Repositries;
+using Talabat.Route.APIs.Errors;
 
 namespace Talabat.Route.APIs.Controllers
 {
@@ -37,7 +38,7 @@ namespace Talabat.Route.APIs.Controllers
 			var product = await _productsRepo.GetWithSpecAsync(spec);
 
 			if (product == null)
-				return NotFound();
+				return NotFound(new ApiResponse(404));
 
 			return Ok(product);
 		}
