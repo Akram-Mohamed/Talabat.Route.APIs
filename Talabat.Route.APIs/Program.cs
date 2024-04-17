@@ -6,6 +6,7 @@ using Talabat.Core.Entities;
 using Talabat.Core.Repositries.Contract;
 using Talabat.Repositries;
 using Talabat.Repositries.Data;
+using Talabat.Route.APIs.Helpers;
 
 namespace Talabat.Route.APIs
 {
@@ -34,7 +35,7 @@ namespace Talabat.Route.APIs
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<ProductBrand>, GenericRepositry<Product>>();
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<Product>, GenericRepositry<Product>>();
 			WebApplicationBuilder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>) );
-
+			WebApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
 			#endregion
 
 
