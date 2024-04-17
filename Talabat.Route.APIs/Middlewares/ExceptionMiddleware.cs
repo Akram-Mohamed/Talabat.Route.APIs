@@ -24,8 +24,34 @@ namespace Talabat.Route.APIs.Middlewares
 
 
 
+		//public async Task InvokeAsync(HttpContext httpContext)
+		//{
 
-		public async Task InvokeAsync(HttpContext httpContext)
+		//	try
+		//	{
+		//		// Take an Action With the Request
+		//		await _next.Invoke(httpContext); // Go To the Next Middleware
+		//										 // Take an Action with The Response
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		_logger.LogError(ex.Message); // Development Env
+		//		// Log Exception in (Database | Files) // Production Env
+		//		httpContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+		//		httpContext.Response.ContentType= "application/json";
+
+		//		var respones = _env.IsDevelopment() ?
+		//			new ApiExceptionResponse((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
+		//			: new ApiExceptionResponse((int)HttpStatusCode.InternalServerError);
+
+		//		var json=JsonSerializer.Serialize(respones);
+
+
+		//		httpContext.Response.WriteAsync(json);
+		//	}
+		//}
+
+		public async Task InvokeAsync(HttpContext httpContext,RequestDelegate _next)
 		{
 
 			try
@@ -37,20 +63,21 @@ namespace Talabat.Route.APIs.Middlewares
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message); // Development Env
-				// Log Exception in (Database | Files) // Production Env
-				httpContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-				httpContext.Response.ContentType= "application/json";
+											  // Log Exception in (Database | Files) // Production Env
+				httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+				httpContext.Response.ContentType = "application/json";
 
 				var respones = _env.IsDevelopment() ?
 					new ApiExceptionResponse((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
 					: new ApiExceptionResponse((int)HttpStatusCode.InternalServerError);
 
-				var json=JsonSerializer.Serialize(respones);
+				var json = JsonSerializer.Serialize(respones);
 
 
 				httpContext.Response.WriteAsync(json);
 			}
 		}
+
 
 	}
 }
