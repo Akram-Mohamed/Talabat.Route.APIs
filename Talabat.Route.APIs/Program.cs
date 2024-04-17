@@ -94,6 +94,8 @@ namespace Talabat.Route.APIs
 			}
 
 			#region Configure Kestrel Services
+			app.UseStatusCodePagesWithRedirects("/errors/{0}");
+
 			app.UseMiddleware<ExceptionMiddleware>();
 
 			// Configure the HTTP request pipeline.
