@@ -10,6 +10,7 @@ using Talabat.Repositries;
 using Talabat.Repositries.Data;
 using Talabat.Route.APIs.Errors;
 using Talabat.Route.APIs.Helpers;
+using Talabat.Route.APIs.Middlewares;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Talabat.Route.APIs
@@ -93,6 +94,8 @@ namespace Talabat.Route.APIs
 			}
 
 			#region Configure Kestrel Services
+			app.UseMiddleware<ExceptionMiddleware>();
+
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
