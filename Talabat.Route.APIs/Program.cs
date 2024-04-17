@@ -27,14 +27,14 @@ namespace Talabat.Route.APIs
 			WebApplicationBuilder.Services.AddEndpointsApiExplorer();
 			WebApplicationBuilder.Services.AddSwaggerGen();
 
-			WebApplicationBuilder.Services.AddDbContext<StoreContext>(options=>
+			WebApplicationBuilder.Services.AddDbContext<StoreContext>(options =>
 			{
 				options.UseSqlServer(WebApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 			});
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<Product>, GenericRepositry<Product>>();
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<ProductBrand>, GenericRepositry<Product>>();
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<Product>, GenericRepositry<Product>>();
-			WebApplicationBuilder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>) );
+			WebApplicationBuilder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
 			WebApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
 			#endregion
 
@@ -47,7 +47,7 @@ namespace Talabat.Route.APIs
 			var _dbContext = services.GetRequiredService<StoreContext>();
 			// ASK CLR for Creating Object from DbContext Explicitly
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-			
+
 			try
 			{
 				await _dbContext.Database.MigrateAsync();
@@ -56,7 +56,7 @@ namespace Talabat.Route.APIs
 			catch (Exception ex)
 			{
 
-				var logger= loggerFactory.CreateLogger<Program>();
+				var logger = loggerFactory.CreateLogger<Program>();
 				logger.LogError(ex, "AN Error Happens On Migrations");
 
 			}
@@ -85,8 +85,8 @@ namespace Talabat.Route.APIs
 			/// endpoints.MapControllers();
 			/// });
 
-
-				app.MapControllers(); 
+			app.UseStaticFiles();
+			app.MapControllers();
 
 
 			#endregion
