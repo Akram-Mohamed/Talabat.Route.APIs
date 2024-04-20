@@ -21,9 +21,9 @@ namespace Talabat.Repositries
 			_dbContext = dbContext;
 		}
 
-		public async Task<IEnumerable<T>> GetAllAsync()
+		public async Task<IReadOnlyList<T>> GetAllAsync()
 		{
-			return (IEnumerable<T>)await _dbContext.Set<Product>().Include(P => P.Brand).Include(P => P.Category).ToListAsync();
+			return (IReadOnlyList<T>)await _dbContext.Set<Product>().Include(P => P.Brand).Include(P => P.Category).ToListAsync();
 			//return await _dbContext.Set<T>().ToListAsync();
 		}
 
@@ -36,7 +36,7 @@ namespace Talabat.Repositries
 			//return await _dbContext.Set<T>().FindAsync(id);
 		}
 
-		public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecifications<T> spec)
+		public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec)
 		{
 			return await ApplySpecifications(spec).ToListAsync();
 		}
@@ -52,6 +52,6 @@ namespace Talabat.Repositries
 		}
 
 
-		 
+
 	}
 }

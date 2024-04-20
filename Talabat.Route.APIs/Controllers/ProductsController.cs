@@ -66,7 +66,7 @@ namespace Talabat.Route.APIs.Controllers
 
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
+		public async Task<ActionResult<IReadOnlyList<Product>>> GetProduct()
 		{
 			var spec = new ProductWithBrandAndCategorySpecifications();
 			var products = await _productsRepo.GetAllWithSpecAsync(spec);
@@ -75,7 +75,7 @@ namespace Talabat.Route.APIs.Controllers
 
 
 		[HttpGet("brands")] // GET: /api/products/brands
-		public async Task<ActionResult<IEnumerable<ProductBrand>>> GetBrands()
+		public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetBrands()
 		{
 			var brands = await _brandsRepo.GetAllAsync();
 			return Ok(brands);
@@ -83,7 +83,7 @@ namespace Talabat.Route.APIs.Controllers
 
 
 		[HttpGet("categories")] // GET: /api/products/categories
-		public async Task<ActionResult<IEnumerable<ProductCategory>>> GetCategories()
+		public async Task<ActionResult<IReadOnlyList<ProductCategory>>> GetCategories()
 		{
 			var categories = await _categoriesRepo.GetAllAsync();
 			return Ok(categories);
