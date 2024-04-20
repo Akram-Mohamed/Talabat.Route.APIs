@@ -15,10 +15,19 @@ namespace Talabat.Route.APIs.Controllers
 
 
 		private readonly IGenericRepositry<Product> _productsRepo;
+		private readonly IGenericRepositry<ProductBrand> _brandsRepo;
+		private readonly IGenericRepositry<ProductCategory> _categoriesRepo;
 
-		public ProductsController(IGenericRepositry<Product> productsRepo)
+		public ProductsController(IGenericRepositry<Product> productsRepo,
+			IGenericRepositry<ProductBrand> brandsRepo,
+			IGenericRepositry<ProductCategory> categoriesRepo)
 		{
+
 			_productsRepo = productsRepo;
+			_brandsRepo = brandsRepo;
+			_categoriesRepo = categoriesRepo;
+
+
 		}
 		// /api/
 		[HttpGet]
@@ -62,6 +71,24 @@ namespace Talabat.Route.APIs.Controllers
 			var spec = new ProductWithBrandAndCategorySpecifications();
 			var products = await _productsRepo.GetAllWithSpecAsync(spec);
 			return Ok(products);
+		}
+
+
+		[HttpGet("brands")] // GET: /api/products/brands
+		public async Task<ActionResult<IEnumerable<ProductBrand>>> GetBrands()
+		{
+			var brands = await _brandsRepo.GetAllAsync();
+			return Ok(brands);
+		}
+
+
+		[HttpGet("categories")] // GET: /api/products/categories
+		public async Task<ActionResult<IEnumerable<ProductCategory>>> GetCategories()
+		{
+			var categories = await _categoriesRepo.GetAllAsync();
+			return Ok(categories);
+
+
 		}
 	}
 }
