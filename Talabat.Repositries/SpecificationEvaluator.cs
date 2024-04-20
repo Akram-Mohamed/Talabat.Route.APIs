@@ -29,7 +29,8 @@ namespace Talabat.Repositries
 				query = query.OrderByDescending(spec.OrderByDesc);
 
 
-
+			if (spec.IsPaginationEnabled)
+				query = query.Skip(spec.Skip).Take(spec.Take);
 
 
 			// query = _dbContext.Set<Product>().Where(// P => P.Name // Includes
