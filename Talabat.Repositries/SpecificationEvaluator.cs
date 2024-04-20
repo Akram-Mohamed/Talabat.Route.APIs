@@ -20,14 +20,23 @@ namespace Talabat.Repositries
 			var query= inputQuery;
 
 
-            if (spec.Criteria is not null)
+            if (spec.Criteria is not null)// P => P.Name
 				query = query.Where(spec.Criteria);
 
-			// query = _dbContext.Set<Product>().Where(P => P.Id // Includes
+			if (spec.OrderBy is not null) // P => P.Name
+				query = query.OrderBy(spec.OrderBy);
+			else if (spec.OrderByDesc is not null)// P => P.Price
+				query = query.OrderByDescending(spec.OrderByDesc);
+
+
+
+
+
+			// query = _dbContext.Set<Product>().Where(// P => P.Name // Includes
 			// 1. P => P. Brand
 			// 2. P => P.Category
 
-			 spec.Includes.Aggregate(query, (CurrentQuery, IncludeExpression) => CurrentQuery.Include(IncludeExpression));
+			spec.Includes.Aggregate(query, (CurrentQuery, IncludeExpression) => CurrentQuery.Include(IncludeExpression));
 
 			return query;
 		}

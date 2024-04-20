@@ -31,7 +31,7 @@ namespace Talabat.Route.APIs.Controllers
 		}
 		// /api/
 		[HttpGet]
-		public async Task<IActionResult> GetProducts()
+		public async Task<IActionResult> GetProductss()
 		{
 			var products = await _productsRepo.GetAllAsync();
 			return Ok(products);
@@ -66,9 +66,9 @@ namespace Talabat.Route.APIs.Controllers
 
 
 		[HttpGet]
-		public async Task<ActionResult<IReadOnlyList<Product>>> GetProduct()
+		public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string sort)
 		{
-			var spec = new ProductWithBrandAndCategorySpecifications();
+			var spec = new ProductWithBrandAndCategorySpecifications(sort);
 			var products = await _productsRepo.GetAllWithSpecAsync(spec);
 			return Ok(products);
 		}
