@@ -29,7 +29,7 @@ namespace Talabat.Core.Specifications
 		public void AddOrderBy(Expression<Func<T, object>> orderByExpression)
 		{
 			OrderBy = orderByExpression;
-		}
+		}	
 		public void AddOrderByDesc(Expression<Func<T, object>> orderByExpression)
 		{
 			OrderBy = orderByExpression;
