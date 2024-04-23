@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOS\NewFolder\**" />
+    <Content Remove="DTOS\NewFolder\**" />
+    <EmbeddedResource Remove="DTOS\NewFolder\**" />
+    <None Remove="DTOS\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -17,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Talabat.Repositries\Talabat.Repositries.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTOS\" />
   </ItemGroup>
 
 </Project>

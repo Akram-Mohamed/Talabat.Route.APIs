@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using StackExchange.Redis;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositries.Contract;
 using Talabat.Repositries;
 using Talabat.Repositries.Data;
 using Talabat.Route.APIs.Errors;
+using Talabat.Route.APIs.Extensions;
 using Talabat.Route.APIs.Helpers;
 using Talabat.Route.APIs.Middlewares;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -36,13 +38,14 @@ namespace Talabat.Route.APIs
 			{
 				options.UseSqlServer(WebApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 			});
+			#region Added ON Extesion Method
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<Product>, GenericRepositry<Product>>();
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<ProductBrand>, GenericRepositry<Product>>();
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<Product>, GenericRepositry<Product>>();
-			WebApplicationBuilder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
-			WebApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
+			//WebApplicationBuilder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
+			//WebApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
 
-
+			/*
 				WebApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options =>
 				{
 					options.InvalidModelStateResponseFactory = (actionContext) =>
@@ -62,11 +65,16 @@ namespace Talabat.Route.APIs
 
 				});
 
+			*/
 
+			#endregion
 
-
-
-
+			WebApplicationBuilder.Services.AddSingleton<IConnectionMultiplexer>((servicesProvider) => {
+				var connection = WebApplicationBuilder.Configuration.GetConnectionString("Redis");
+				return ConnectionMultiplexer.Connect(connection!);
+			});
+			
+			WebApplicationBuilder.Services.AddApplicationServices();
 
 			#endregion
 
