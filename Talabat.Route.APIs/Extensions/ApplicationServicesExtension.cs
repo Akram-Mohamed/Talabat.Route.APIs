@@ -16,6 +16,7 @@ namespace Talabat.Route.APIs.Extensions
 		{
 
 			services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
+			// services.AddScoped(typeof(IBasketRepositry<>), typeof(BasketRepositry<>));
 			services.AddAutoMapper(typeof(MappingProfiles));
 			services.Configure<ApiBehaviorOptions>(options =>
 			{

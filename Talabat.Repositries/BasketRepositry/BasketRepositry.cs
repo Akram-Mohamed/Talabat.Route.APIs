@@ -32,7 +32,7 @@ namespace Talabat.Repositries.BasketRepositry
 
 		public async Task<CustomerBasket?> UpdateBasketAsync(CustomerBasket customerBasket)
 		{
-			var createdOrUpdated = await _database.StringSetAsync(customerBasket.Id, JsonSerializer.Deserialize<CustomerBasket>(customerBasket), TimeSpan.FromDays(20));
+			var createdOrUpdated = await _database.StringSetAsync(customerBasket.Id, JsonSerializer.Serialize<CustomerBasket>(customerBasket), TimeSpan.FromDays(20));
 			if (createdOrUpdated is false) { return null; }
 			return await GetBasketAsync(customerBasket.Id);
 
