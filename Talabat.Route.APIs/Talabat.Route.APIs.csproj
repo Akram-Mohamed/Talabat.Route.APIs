@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOS\" />
+    <Folder Include="DTOS\NewFolder\" />
   </ItemGroup>
 
 </Project>
