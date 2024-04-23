@@ -1,6 +1,6 @@
 ﻿namespace Talabat.Route.APIs.DTOS
 {
-	public class ProductToReturnDTO
+	public class ProductToReturnDto
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
