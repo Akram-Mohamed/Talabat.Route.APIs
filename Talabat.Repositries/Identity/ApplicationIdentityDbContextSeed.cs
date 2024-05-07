@@ -16,10 +16,10 @@ namespace Talabat.Repositries.Identity
             {
                 var user = new ApplicationUser()
                 {
-                    DisplayName = "Mahmoud Khamis",
-                    Email = "m.khamis22@outlook.com",
-                    UserName = "Mahmoud.Khamis",
-                    PhoneNumber = "01003202138"
+                    DisplayName = "Akram Mohamed",
+                    Email = "AkramMohamed@outlook.com",
+                    UserName = "AkramMohamed",
+                    PhoneNumber = "01000760300"
                 };
                 await userManger.CreateAsync(user, "P@ssw0rd");
             }

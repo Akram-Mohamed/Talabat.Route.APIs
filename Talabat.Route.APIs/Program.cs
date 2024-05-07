@@ -1,11 +1,14 @@
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using Talabat.Core.Entities;
+using Talabat.Core.Entities.Identity;
 using Talabat.Core.Repositries.Contract;
 using Talabat.Repositries;
 using Talabat.Repositries.Data;
@@ -79,11 +82,16 @@ namespace Talabat.Route.APIs
             });
 
             WebApplicationBuilder.Services.AddApplicationServices();
+            WebApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationIdentityDbContext>();
 
-			#endregion
+            WebApplicationBuilder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+           
+            #endregion
 
 
-			var app = WebApplicationBuilder.Build();
+            var app = WebApplicationBuilder.Build();
 
 			using var scope = app.Services.CreateScope();
 			app.Services.CreateScope();
@@ -91,12 +99,15 @@ namespace Talabat.Route.APIs
 			var _dbContext = services.GetRequiredService<StoreContext>();
 			// ASK CLR for Creating Object from DbContext Explicitly
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-
+            var _applicationIdentityDbContext = services.GetRequiredService<ApplicationIdentityDbContext>();
+            var _userManger = services.GetRequiredService<UserManager<ApplicationUser>>();            
 			try
 			{
 				await _dbContext.Database.MigrateAsync();
 				await StoredContextSeed.SeedAsync(_dbContext);
-			}
+                await _applicationIdentityDbContext.Database.MigrateAsync();
+                await ApplicationIdentityDbContextSeed.DataSeedAsync(_userManger);
+            }
 			catch (Exception ex)
 			{
 
