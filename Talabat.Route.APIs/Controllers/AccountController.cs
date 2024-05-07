@@ -87,6 +87,16 @@ namespace Talabat.Route.APIs.Controllers
         }
 
         [Authorize]
+        [HttpGet("address")]
+        public async Task<ActionResult<AddressDTO>> GetUserAddress()
+        {
+
+            var user = await _userManager.FindUserWihAddressAsync(User);
+
+            return Ok(_mapper.Map<AddressDTO>(user.Address));
+        }
+
+        [Authorize]
         [HttpPut("address")]
         public async Task<ActionResult<Address>> UpdateUserAddress(AddressDTO address)
         {
