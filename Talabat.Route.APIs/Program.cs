@@ -1,27 +1,17 @@
-
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using StackExchange.Redis;
-using Talabat.Core.Entities;
 using Talabat.Core.Entities.Identity;
-using Talabat.Core.Repositries.Contract;
-using Talabat.Repositries;
+using Talabat.Core.Services.Contract;
 using Talabat.Repositries.Data;
 using Talabat.Repositries.Identity;
-using Talabat.Route.APIs.Errors;
 using Talabat.Route.APIs.Extensions;
-using Talabat.Route.APIs.Helpers;
 using Talabat.Route.APIs.Middlewares;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Talabat.Services.AuthService;
 
 namespace Talabat.Route.APIs
 {
-	public class Program
+    public class Program
 	{
 		public static async Task Main(string[] args)
 		{
@@ -85,9 +75,9 @@ namespace Talabat.Route.APIs
             WebApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationIdentityDbContext>();
 
-            WebApplicationBuilder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            WebApplicationBuilder.Services.AddScoped<IAuthService, AuthService >();
 
-           
+
             #endregion
 
 
