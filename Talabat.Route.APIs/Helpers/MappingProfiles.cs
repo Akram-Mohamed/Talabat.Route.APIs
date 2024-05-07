@@ -17,10 +17,10 @@ namespace Talabat.Route.APIs.Helpers
 			//	.ForMember(P => P.PictureUrl, O => O.MapFrom<ProductPictureUrlResolver>());
 			CreateMap<CustomerBasketDto, CustomerBasket>();
 			CreateMap<BasketItemDto, BasketItem>();
-            CreateMap<Address, AddressDTO>().ReverseMap();
+            CreateMap<ShippingAddressDTO, AddressDTO>().ReverseMap();
 
 
-         
+             
 
             CreateMap<OrderItem, OrderItemDTO>()
                 .ForMember(orderItemDto => orderItemDto.ProductId, O => O.MapFrom(orderItem => orderItem.Product.ProductId))
