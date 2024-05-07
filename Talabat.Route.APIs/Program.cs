@@ -9,6 +9,7 @@ using Talabat.Core.Entities;
 using Talabat.Core.Repositries.Contract;
 using Talabat.Repositries;
 using Talabat.Repositries.Data;
+using Talabat.Repositries.Identity;
 using Talabat.Route.APIs.Errors;
 using Talabat.Route.APIs.Extensions;
 using Talabat.Route.APIs.Helpers;
@@ -73,8 +74,11 @@ namespace Talabat.Route.APIs
 				var connection = WebApplicationBuilder.Configuration.GetConnectionString("Redis");
 				return ConnectionMultiplexer.Connect(connection!);
 			});
-			
-			WebApplicationBuilder.Services.AddApplicationServices();
+            WebApplicationBuilder.Services.AddDbContext<ApplicationIdentityDbContext>((options) => {
+                options.UseSqlServer(WebApplicationBuilder.Configuration.GetConnectionString("IdentityConnection"));
+            });
+
+            WebApplicationBuilder.Services.AddApplicationServices();
 
 			#endregion
 
