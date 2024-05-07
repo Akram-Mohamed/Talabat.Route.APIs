@@ -11,3 +11,4 @@ namespace Talabat.Route.APIs.DTOS
         [Required]
         public string Password { get; set; } = null!;
     }
+}

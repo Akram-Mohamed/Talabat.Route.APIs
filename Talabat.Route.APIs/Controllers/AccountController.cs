@@ -42,6 +42,30 @@ namespace Talabat.Route.APIs.Controllers
             }); ;
         }
 
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDTO>> Register(RegisterDTO model)
+        {
+            // check if user already exsit
+            var user = new ApplicationUser()
+            {
+                DisplayName = model.DisplayName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                UserName = model.Email.Split('@')[0],
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded) return BadRequest(new ApiValidationErrorResponse() { Errors = result.Errors.Select(E => E.Description) });
+
+            return Ok(new UserDTO()
+            {
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                //Token = await _authService.CreateTokenAsync(user, _userManager)
+            });
+        }
+
 
 
     }
