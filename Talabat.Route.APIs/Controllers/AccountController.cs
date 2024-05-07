@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Talabat.Core.Entities.Identity;
+using Talabat.Core.Services.Contract;
 using Talabat.Route.APIs.DTOS;
 using Talabat.Route.APIs.Errors;
 
@@ -14,10 +17,10 @@ namespace Talabat.Route.APIs.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IAuthenticationService _authService;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IAuthenticationService authService, IMapper mapper)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IAuthService authService, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -66,6 +69,21 @@ namespace Talabat.Route.APIs.Controllers
             });
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UserDTO>> GetCurruntUSer()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email) ?? String.Empty;
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            return Ok(new UserDTO()
+            {
+                DisplayName = user.DisplayName,
+                Email = email,
+                Token = await _authService.CreateTokenAsync(user, _userManager)
+            });
+        }
 
 
     }
