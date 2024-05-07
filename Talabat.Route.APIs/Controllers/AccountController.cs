@@ -9,6 +9,7 @@ using Talabat.Core.Entities.Identity;
 using Talabat.Core.Services.Contract;
 using Talabat.Route.APIs.DTOS;
 using Talabat.Route.APIs.Errors;
+using Talabat.Route.APIs.Extensions;
 
 namespace Talabat.Route.APIs.Controllers
 {
@@ -65,7 +66,7 @@ namespace Talabat.Route.APIs.Controllers
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                //Token = await _authService.CreateTokenAsync(user, _userManager)
+                Token = await _authService.CreateTokenAsync(user, _userManager)
             });
         }
 
@@ -85,6 +86,20 @@ namespace Talabat.Route.APIs.Controllers
             });
         }
 
+        [Authorize]
+        [HttpPut("address")]
+        public async Task<ActionResult<Address>> UpdateUserAddress(AddressDTO address)
+        {
+            var updatedAddress = _mapper.Map<Address>(address);
+            var user = await _userManager.FindUserWihAddressAsync(User);
+            updatedAddress.Id = user.Address.Id;
+            user.Address = updatedAddress;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return BadRequest(new ApiValidationErrorResponse() { Errors = result.Errors.Select(E => E.Description) });
+
+            return Ok(updatedAddress);
+        }
 
     }
 }
