@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Talabat.Core;
 using Talabat.Core.Repositries.Contract;
+using Talabat.Core.Services.Contract;
 using Talabat.Repositries;
 using Talabat.Repositries.BasketRepositry;
 using Talabat.Repositries.Data;
 using Talabat.Route.APIs.Errors;
 using Talabat.Route.APIs.Helpers;
+using Talabat.Services;
 
 namespace Talabat.Route.APIs.Extensions
 {
@@ -14,8 +17,11 @@ namespace Talabat.Route.APIs.Extensions
 
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
+            services.AddScoped(typeof(IOrderService), typeof(OrderService));
+      
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 
-			services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
+            services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
 			// services.AddScoped(typeof(IBasketRepositry<>), typeof(BasketRepositry<>));
 			services.AddAutoMapper(typeof(MappingProfiles));
 			services.Configure<ApiBehaviorOptions>(options =>
