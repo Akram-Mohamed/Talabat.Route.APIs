@@ -76,7 +76,7 @@ namespace Talabat.Route.APIs.Controllers
 			var countSpec = new ProductWithFilterationForCount(specParams);
 			var count= await _productsRepo.GetCountAsync(countSpec);
 			//var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
-			return Ok(new Pagination<Product>(specParams.PageIndex, specParams.PageSize, products));
+			return Ok(new Pagination<Product>(specParams.PageIndex, count, specParams.PageSize, products));
 		}
 
 
