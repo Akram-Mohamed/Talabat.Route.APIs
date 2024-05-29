@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
+using Talabat.Core;
 using Talabat.Core.Repositries.Contract;
+using Talabat.Core.Services.Contract;
 using Talabat.Repositries;
 using Talabat.Repositries.BasketRepositry;
 using Talabat.Repositries.Data;
 using Talabat.Route.APIs.Errors;
 using Talabat.Route.APIs.Helpers;
+using Talabat.Services.OrderService;
+using Talabat.Services.PaymentService;
 
 namespace Talabat.Route.APIs.Extensions
 {
@@ -14,8 +19,8 @@ namespace Talabat.Route.APIs.Extensions
 
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
-
-			services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
+            services.AddScoped(typeof(IProductService), typeof(ProductService));
+            services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
 			// services.AddScoped(typeof(IBasketRepositry<>), typeof(BasketRepositry<>));
 			services.AddAutoMapper(typeof(MappingProfiles));
 			services.Configure<ApiBehaviorOptions>(options =>
@@ -39,12 +44,16 @@ namespace Talabat.Route.APIs.Extensions
 
 			services.AddScoped(typeof(IBasketRepositry), typeof(BasketRepositry));
 
+            services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
+            services.AddScoped(typeof(IOrderService), typeof(OrderService));
+            //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped(typeof(IProductService), typeof(ProductService));
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 
 
 
 
-
-			return services;
+            return services;
 		}
 	}
 }

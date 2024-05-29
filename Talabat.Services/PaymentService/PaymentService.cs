@@ -15,7 +15,7 @@ using Talabat.Core.Services.Contract;
 using Product = Talabat.Core.Entities.Product;
 namespace Talabat.Services.PaymentService
 {
-    class PaymentService : IPaymentService
+    public class PaymentService : IPaymentService
     {
 
         private readonly IConfiguration _configs;

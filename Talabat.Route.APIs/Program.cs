@@ -80,6 +80,13 @@ namespace Talabat.Route.APIs
             .AddEntityFrameworkStores<ApplicationIdentityDbContext>();
 
             WebApplicationBuilder.Services.AddScoped<IAuthService, AuthService >();
+            WebApplicationBuilder.Services.AddCors(options =>
+            {
+                options.AddPolicy("MyPolicy", policyOptions =>
+                {
+                    policyOptions.AllowAnyHeader().AllowAnyMethod().WithOrigins(WebApplicationBuilder.Configuration["FrontBaseUrl"]);
+                });
+            });
 
             WebApplicationBuilder.Services.AddAuthentication(options =>
             {
@@ -158,11 +165,11 @@ namespace Talabat.Route.APIs
 
 			app.UseStaticFiles();
 			app.MapControllers();
+            app.UseCors("MyPolicy");
 
+            #endregion
 
-			#endregion
-
-			app.Run();
+            app.Run();
 		}
 	}
 }

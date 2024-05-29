@@ -55,5 +55,15 @@ namespace Talabat.Repositries
 		{
 			return  await ApplySpecifications(spec).CountAsync();
 		}
-	}
+
+
+        public void Add(T entity)
+            => _dbContext.Add(entity);
+
+        public void Update(T entity)
+            => _dbContext.Update(entity);
+
+        public void Delete(T entity)
+            => _dbContext.Remove(entity);
+    }
 }
