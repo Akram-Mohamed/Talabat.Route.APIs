@@ -1,21 +1,21 @@
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Talabat.Core.Entities;
-using Talabat.Core.Repositries.Contract;
-using Talabat.Repositries;
+using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
+using System.Text;
+using Talabat.Core.Entities.Identity;
+using Talabat.Core.Services.Contract;
 using Talabat.Repositries.Data;
-using Talabat.Route.APIs.Errors;
-using Talabat.Route.APIs.Helpers;
+using Talabat.Repositries.Identity;
+using Talabat.Route.APIs.Extensions;
 using Talabat.Route.APIs.Middlewares;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Talabat.Services.AuthService;
 
 namespace Talabat.Route.APIs
 {
-	public class Program
+    public class Program
 	{
 		public static async Task Main(string[] args)
 		{
@@ -36,13 +36,14 @@ namespace Talabat.Route.APIs
 			{
 				options.UseSqlServer(WebApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 			});
+			#region Added ON Extesion Method
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<Product>, GenericRepositry<Product>>();
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<ProductBrand>, GenericRepositry<Product>>();
 			//WebApplicationBuilder.Services.AddScoped<IGenericRepositry<Product>, GenericRepositry<Product>>();
-			WebApplicationBuilder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
-			WebApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
+			//WebApplicationBuilder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
+			//WebApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
 
-
+			/*
 				WebApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options =>
 				{
 					options.InvalidModelStateResponseFactory = (actionContext) =>
@@ -62,16 +63,47 @@ namespace Talabat.Route.APIs
 
 				});
 
-
-
-
-
-
+			*/
 
 			#endregion
 
+			WebApplicationBuilder.Services.AddSingleton<IConnectionMultiplexer>((servicesProvider) => {
+				var connection = WebApplicationBuilder.Configuration.GetConnectionString("Redis");
+				return ConnectionMultiplexer.Connect(connection!);
+			});
+            WebApplicationBuilder.Services.AddDbContext<ApplicationIdentityDbContext>((options) => {
+                options.UseSqlServer(WebApplicationBuilder.Configuration.GetConnectionString("IdentityConnection"));
+            });
 
-			var app = WebApplicationBuilder.Build();
+            WebApplicationBuilder.Services.AddApplicationServices();
+            WebApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+
+            WebApplicationBuilder.Services.AddScoped<IAuthService, AuthService >();
+
+            WebApplicationBuilder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateAudience = true,
+                    ValidAudience = WebApplicationBuilder.Configuration["JWT:ValidAudience"],
+                    ValidateIssuer = true,
+                    ValidIssuer = WebApplicationBuilder.Configuration["JWT:ValidIssuer"],
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(WebApplicationBuilder.Configuration["JWT:AuthKey"] ?? "")),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                };
+            });
+            #endregion
+
+
+            var app = WebApplicationBuilder.Build();
 
 			using var scope = app.Services.CreateScope();
 			app.Services.CreateScope();
@@ -79,12 +111,15 @@ namespace Talabat.Route.APIs
 			var _dbContext = services.GetRequiredService<StoreContext>();
 			// ASK CLR for Creating Object from DbContext Explicitly
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-
+            var _applicationIdentityDbContext = services.GetRequiredService<ApplicationIdentityDbContext>();
+            var _userManger = services.GetRequiredService<UserManager<ApplicationUser>>();            
 			try
 			{
 				await _dbContext.Database.MigrateAsync();
 				await StoredContextSeed.SeedAsync(_dbContext);
-			}
+                await _applicationIdentityDbContext.Database.MigrateAsync();
+                await ApplicationIdentityDbContextSeed.DataSeedAsync(_userManger);
+            }
 			catch (Exception ex)
 			{
 

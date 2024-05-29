@@ -12,12 +12,12 @@ namespace Talabat.Core.Repositries.Contract
 	public interface IGenericRepositry<T> where T : BaseEntitiy
 	{
 
+		Task<IReadOnlyList<T>> GetAllAsync();
 		Task<T> GetAsync(int id);
-		Task<IEnumerable<T>> GetAllAsync();
 
 
-		Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecifications<T> spec);
+		Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec);
 		Task<T?> GetWithSpecAsync(ISpecifications<T> spec);
-
+		Task<int> GetCountAsync(ISpecifications<T> spec);
 	}
 }
