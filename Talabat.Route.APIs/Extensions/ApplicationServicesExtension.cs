@@ -9,6 +9,7 @@ using Talabat.Repositries.BasketRepositry;
 using Talabat.Repositries.Data;
 using Talabat.Route.APIs.Errors;
 using Talabat.Route.APIs.Helpers;
+using Talabat.Services.CashService;
 using Talabat.Services.OrderService;
 using Talabat.Services.PaymentService;
 
@@ -19,7 +20,7 @@ namespace Talabat.Route.APIs.Extensions
 
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
-            
+			services.AddSingleton(typeof(IResponseCasheService),typeof(ResponseCacheService));
             services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
 			// services.AddScoped(typeof(IBasketRepositry<>), typeof(BasketRepositry<>));
 			services.AddAutoMapper(typeof(MappingProfiles));

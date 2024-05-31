@@ -8,6 +8,7 @@ using Talabat.Core.Specifications.Product_Specs;
 using Talabat.Repositries;
 using Talabat.Route.APIs.Errors;
 using Talabat.Route.APIs.Helpers;
+using Talabat.Services.CashService;
 
 namespace Talabat.Route.APIs.Controllers
 {
@@ -67,7 +68,7 @@ namespace Talabat.Route.APIs.Controllers
 		//	return Ok(product);
 		//}
 
-
+		[CachedAttribute(600)]
 		[HttpGet]
 		public async Task<ActionResult<Pagination<Product>>> GetProducts([FromQuery] ProductSpecParams specParams)
 		{
