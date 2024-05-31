@@ -51,7 +51,7 @@ namespace Talabat.Route.APIs.Helpers
         }
 
         private string GenerateCacheKeyFromRequest(HttpRequest request)
-        {
+        {  
 
             var keyBuilder = new StringBuilder();
             keyBuilder.Append(request.Path); // /api/products
