@@ -56,14 +56,6 @@ namespace Talabat.Repositries
 			return  await ApplySpecifications(spec).CountAsync();
 		}
 
-        Task<IEnumerable<T>> IGenericRepositry<T>.GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
 
-        Task<IEnumerable<T>> IGenericRepositry<T>.GetAllWithSpecAsync(ISpecifications<T> spec)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

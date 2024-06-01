@@ -1,17 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Talabat.Core.Entities.Order_Aggregate;
-using Talabat.Core.Services.Contract;
-using Talabat.Route.APIs.DTOS;
-using Talabat.Route.APIs.Errors;
 
-namespace Talabat.Route.APIs.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
     public class OrdersController : BaseApiController
     {
         private readonly IOrderService _orderService;
@@ -29,7 +16,6 @@ namespace Talabat.Route.APIs.Controllers
         [Authorize]
         public async Task<ActionResult<OrderToReturnDTO?>> CreateOrder(OrderDTO model)
         {
-            var address = _mapper.Map<ShippingAddressDTO, AddressDTO>(model.ShippingAddress);
 
             var order = await _orderService.CreateOrderAsync(model.BuyerEmail, model.BasketId, model.DeliveryMethodId, address);
             if (order is null) return BadRequest(new ApiResponse(400));
