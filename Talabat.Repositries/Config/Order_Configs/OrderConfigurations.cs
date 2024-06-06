@@ -22,7 +22,7 @@ namespace Talabat.Repositries.Config.Order_Configs
                     (orderStatus) => (OrderStatus)Enum.Parse(typeof(OrderStatus), orderStatus)
                 );
 
-            builder.HasOne(order => order.DeliveyMethod).WithMany().OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(order => order.DelivreyMethod).WithMany().OnDelete(DeleteBehavior.SetNull);
 
             builder.Property(order => order.SubTotal).HasColumnType("decimal(12,2)");
 
